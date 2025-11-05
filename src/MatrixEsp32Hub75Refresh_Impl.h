@@ -40,6 +40,7 @@
 
 #include "Esp32MemDisplay.h"
 #include "rom/lldesc.h"
+#include "esp_rom_gpio.h"
 
 #define INLINE __attribute__( ( always_inline ) ) inline
 
@@ -145,13 +146,13 @@ void SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType,
 
     // setup debug output
 #ifdef DEBUG_PINS_ENABLED
-    gpio_pad_select_gpio(DEBUG_1_GPIO);
+    esp_rom_gpio_pad_select_gpio(DEBUG_1_GPIO);
     gpio_set_direction(DEBUG_1_GPIO, GPIO_MODE_OUTPUT);
     gpio_set_level(DEBUG_1_GPIO, 1);
     gpio_set_level(DEBUG_1_GPIO, 0);
 
 #ifdef DEBUG_2_GPIO
-    gpio_pad_select_gpio(DEBUG_2_GPIO);
+    esp_rom_gpio_pad_select_gpio(DEBUG_2_GPIO);
     gpio_set_direction(DEBUG_2_GPIO, GPIO_MODE_OUTPUT);
     gpio_set_level(DEBUG_2_GPIO, 1);
     gpio_set_level(DEBUG_2_GPIO, 0);
@@ -296,51 +297,51 @@ void SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType,
         int C12[16] = {0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
         int C13[16] = {0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0};
 
-        gpio_pad_select_gpio(CLK_PIN);
+        esp_rom_gpio_pad_select_gpio(CLK_PIN);
         gpio_set_direction(CLK_PIN, GPIO_MODE_OUTPUT);
 #ifdef CLK_MANUAL_PIN        
-        gpio_pad_select_gpio(CLK_MANUAL_PIN);
+        esp_rom_gpio_pad_select_gpio(CLK_MANUAL_PIN);
         gpio_set_direction(CLK_MANUAL_PIN, GPIO_MODE_OUTPUT);
 #endif
-        gpio_pad_select_gpio(LAT_PIN);
+        esp_rom_gpio_pad_select_gpio(LAT_PIN);
         gpio_set_direction(LAT_PIN, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(OE_PIN);
+        esp_rom_gpio_pad_select_gpio(OE_PIN);
         gpio_set_direction(OE_PIN, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(R1_PIN);
+        esp_rom_gpio_pad_select_gpio(R1_PIN);
         gpio_set_direction(R1_PIN, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(G1_PIN);
+        esp_rom_gpio_pad_select_gpio(G1_PIN);
         gpio_set_direction(G1_PIN, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(B1_PIN);
+        esp_rom_gpio_pad_select_gpio(B1_PIN);
         gpio_set_direction(B1_PIN, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(R2_PIN);
+        esp_rom_gpio_pad_select_gpio(R2_PIN);
         gpio_set_direction(R2_PIN, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(G2_PIN);
+        esp_rom_gpio_pad_select_gpio(G2_PIN);
         gpio_set_direction(G2_PIN, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(B2_PIN);
+        esp_rom_gpio_pad_select_gpio(B2_PIN);
         gpio_set_direction(B2_PIN, GPIO_MODE_OUTPUT);
 
 #if (A_PIN >= 0)
-        gpio_pad_select_gpio(A_PIN);
+        esp_rom_gpio_pad_select_gpio(A_PIN);
         gpio_set_direction(A_PIN, GPIO_MODE_OUTPUT);
         gpio_set_level(A_PIN, 1);
 #endif
 #if (B_PIN >= 0)
-        gpio_pad_select_gpio(B_PIN);
+        esp_rom_gpio_pad_select_gpio(B_PIN);
         gpio_set_direction(B_PIN, GPIO_MODE_OUTPUT);
         gpio_set_level(B_PIN, 0);
 #endif
 #if (C_PIN >= 0)
-        gpio_pad_select_gpio(C_PIN);
+        esp_rom_gpio_pad_select_gpio(C_PIN);
         gpio_set_direction(C_PIN, GPIO_MODE_OUTPUT);
         gpio_set_level(C_PIN, 0);
 #endif
 #if (D_PIN >= 0)
-        gpio_pad_select_gpio(D_PIN);
+        esp_rom_gpio_pad_select_gpio(D_PIN);
         gpio_set_direction(D_PIN, GPIO_MODE_OUTPUT);
         gpio_set_level(D_PIN, 0);
 #endif
 #if (E_PIN >= 0)
-        gpio_pad_select_gpio(E_PIN);
+        esp_rom_gpio_pad_select_gpio(E_PIN);
         gpio_set_direction(E_PIN, GPIO_MODE_OUTPUT);
         gpio_set_level(E_PIN, 0);
 #endif
@@ -441,7 +442,7 @@ void SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType,
 
 #ifdef CLK_MANUAL_PIN
     // this pin can be manually toggled when the latch pin is high to send CLK pulses to the panel (normally latch blocks the clock signal on the ESP32 circuit).  Set idle to low so there's no extra CLK pulse when latch goes high   
-    gpio_pad_select_gpio(CLK_MANUAL_PIN);
+    esp_rom_gpio_pad_select_gpio(CLK_MANUAL_PIN);
     gpio_set_direction(CLK_MANUAL_PIN, GPIO_MODE_OUTPUT);
     gpio_set_level(CLK_MANUAL_PIN, 0);
 #endif
@@ -454,10 +455,10 @@ void SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType,
         .bits=MATRIX_I2S_MODE,
         .bufa=0,
         .bufb=0,
-        desccount,
-        desccount,
-        dmadesc_a,
-        dmadesc_b
+        .desccount_a=desccount,
+        .desccount_b=desccount,
+        .lldesc_a=dmadesc_a,
+        .lldesc_b=dmadesc_b
     };
 
     //Setup I2S

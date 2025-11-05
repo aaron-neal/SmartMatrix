@@ -32,6 +32,10 @@
 #include "esp_heap_caps.h"
 #include "esp32_i2s_parallel.h"
 
+#if __has_include("hal/gpio_hal.h")
+#include "hal/gpio_hal.h"
+#endif
+
 typedef struct {
     volatile lldesc_t *dmadesc_a, *dmadesc_b;
     int desccount_a, desccount_b;
@@ -128,14 +132,24 @@ static void gpio_setup_out(int gpio, int sig) {
     if (gpio==-1) return;
     PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
     gpio_set_direction(gpio, GPIO_MODE_DEF_OUTPUT);
-    gpio_matrix_out(gpio, sig, false, false);
+    gpio_hal_context_t gpio_hal = {
+        .dev = GPIO_HAL_GET_HW(GPIO_PORT_0)
+    };
+    gpio_hal_func_sel(&gpio_hal, GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
+    gpio_set_direction(gpio, GPIO_MODE_OUTPUT);
+    esp_rom_gpio_connect_out_signal(gpio, sig, false, false);
 }
 
 static void gpio_setup_out_invert(int gpio, int sig) {      
-     if (gpio==-1) return;      
-     PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);        
-     gpio_set_direction(gpio, GPIO_MODE_DEF_OUTPUT);        
-     gpio_matrix_out(gpio, sig, true, false);       
+    if (gpio==-1) return;      
+    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);        
+    gpio_set_direction(gpio, GPIO_MODE_DEF_OUTPUT);        
+    gpio_hal_context_t gpio_hal = {
+        .dev = GPIO_HAL_GET_HW(GPIO_PORT_0)
+    };
+    gpio_hal_func_sel(&gpio_hal, GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
+    gpio_set_direction(gpio, GPIO_MODE_OUTPUT);
+    esp_rom_gpio_connect_out_signal(gpio, sig, true, false);
  }
 
 static void dma_reset(i2s_dev_t *dev) {
