@@ -26,11 +26,13 @@
 
 #include "soc/i2s_struct.h"
 #include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
 #include "soc/io_mux_reg.h"
 #include "rom/lldesc.h"
 #include "esp_heap_caps.h"
 #include "esp32_i2s_parallel.h"
+#include "driver/gpio.h"
+#include "esp_rom_gpio.h"
+#include "esp_private/periph_ctrl.h"
 
 #if __has_include("hal/gpio_hal.h")
 #include "hal/gpio_hal.h"
@@ -131,24 +133,14 @@ void link_dma_desc(volatile lldesc_t *dmadesc, volatile lldesc_t *prevdmadesc, v
 static void gpio_setup_out(int gpio, int sig) {
     if (gpio==-1) return;
     PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
-    gpio_set_direction(gpio, GPIO_MODE_DEF_OUTPUT);
-    gpio_hal_context_t gpio_hal = {
-        .dev = GPIO_HAL_GET_HW(GPIO_PORT_0)
-    };
-    gpio_hal_func_sel(&gpio_hal, GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
-    gpio_set_direction(gpio, GPIO_MODE_OUTPUT);
+    gpio_set_direction((gpio_num_t)gpio, GPIO_MODE_DEF_OUTPUT);
     esp_rom_gpio_connect_out_signal(gpio, sig, false, false);
 }
 
 static void gpio_setup_out_invert(int gpio, int sig) {      
     if (gpio==-1) return;      
-    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);        
-    gpio_set_direction(gpio, GPIO_MODE_DEF_OUTPUT);        
-    gpio_hal_context_t gpio_hal = {
-        .dev = GPIO_HAL_GET_HW(GPIO_PORT_0)
-    };
-    gpio_hal_func_sel(&gpio_hal, GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
-    gpio_set_direction(gpio, GPIO_MODE_OUTPUT);
+    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
+    gpio_set_direction((gpio_num_t)gpio, GPIO_MODE_DEF_OUTPUT);
     esp_rom_gpio_connect_out_signal(gpio, sig, true, false);
  }
 
