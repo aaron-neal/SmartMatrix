@@ -1,7 +1,7 @@
 #ifndef _SMARTMATRIX_CIRCULARBUFFER_H_
 #define _SMARTMATRIX_CIRCULARBUFFER_H_
 
-// TODO: Consider INLINE for several functions - many small, only used in one place, in frequently used code
+// TODO: Consider INLINE_1 for several functions - many small, only used in one place, in frequently used code
 
 /* Circular buffer object */
 typedef struct {

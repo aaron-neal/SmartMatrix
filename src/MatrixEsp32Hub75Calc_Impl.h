@@ -24,7 +24,7 @@
 #include "SmartMatrix.h"
 #include "Esp32MemDisplay.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 // to avoid 100% CPU usage, we by default don't calculate on every frame.  Calc refresh rate will be a fraction of Refresh refresh rate
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
@@ -492,7 +492,7 @@ int SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, opt
 #define OEPWM_THRESHOLD_BIT 1
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers48(frameStruct * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
+INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers48(frameStruct * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
     int i;
     int multiRowRefreshRowOffset = 0;
     int numPixelsPerTempRow = PIXELS_PER_LATCH/PHYSICAL_ROWS_PER_REFRESH_ROW;
@@ -823,7 +823,7 @@ INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelT
 }
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers24(frameStruct * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
+INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers24(frameStruct * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
     int i;
     int multiRowRefreshRowOffset = 0;
     int numPixelsPerTempRow = PIXELS_PER_LATCH/PHYSICAL_ROWS_PER_REFRESH_ROW;
@@ -1105,7 +1105,7 @@ INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelT
 }
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(int lsbMsbTransitionBit, int numBrightnessShifts) {
+INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(int lsbMsbTransitionBit, int numBrightnessShifts) {
 #if 1
     unsigned char currentRow;
 

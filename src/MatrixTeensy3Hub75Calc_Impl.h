@@ -23,7 +23,7 @@
 
 #include "SmartMatrix.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
 uint8_t SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::calc_refreshRate = 120;
@@ -344,7 +344,7 @@ int SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, opt
 }
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags> template <typename RGB_TEMP>
-INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers48(rowDataStruct * currentRowDataPtr, unsigned char currentRow, RGB_TEMP tempBufferType) {
+INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers48(rowDataStruct * currentRowDataPtr, unsigned char currentRow, RGB_TEMP tempBufferType) {
     int i;
     int multiRowRefreshRowOffset = 0;
     const int numPixelsPerTempRow = PIXELS_PER_LATCH/PHYSICAL_ROWS_PER_REFRESH_ROW;
@@ -569,7 +569,7 @@ INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelT
 }
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(unsigned char currentRow) {
+INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(unsigned char currentRow) {
     rowDataStruct * currentRowDataPtr = SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getNextRowBufferPtr();
 
     // same function supports any refresh depth up to 48, choose between rgb24 and rgb48 for temporary storage to save RAM

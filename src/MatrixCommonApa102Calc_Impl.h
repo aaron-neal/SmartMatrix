@@ -23,7 +23,7 @@
 
 #include "SmartMatrix.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
 uint8_t SmartMatrixApaCalc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::refreshRate = 60;
@@ -240,7 +240,7 @@ template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char pan
 int SmartMatrixApaCalc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::dimmingFactor = 0;
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-INLINE void SmartMatrixApaCalc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(frameDataStruct * currentRowDataPtr, unsigned char currentRow) {
+INLINE_1 void SmartMatrixApaCalc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(frameDataStruct * currentRowDataPtr, unsigned char currentRow) {
     int i,j;
 
     // static to avoid putting large buffer on the stack

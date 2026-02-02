@@ -24,7 +24,7 @@
 #include "SmartMatrix.h"
 #include "Esp32MemDisplay.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 template <int dummyvar>
 void SmartMatrixHub75Calc_NT<dummyvar>::addLayer(SM_Layer * newlayer) {
@@ -428,7 +428,7 @@ int SmartMatrixHub75Calc_NT<dummyvar>::getMultiRowRefreshPixelGroupOffset(void) 
 #define OEPWM_THRESHOLD_BIT 1
 
 template <int dummyvar>
-INLINE void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers48(MATRIX_DATA_STORAGE_TYPE * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
+INLINE_1 void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers48(MATRIX_DATA_STORAGE_TYPE * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
     int i;
     int multiRowRefreshRowOffset = 0;
     int numPixelsPerTempRow = pixels_per_latch/physical_rows_per_refresh_row;
@@ -760,7 +760,7 @@ INLINE void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers48(MATRIX_DATA_S
 }
 
 template <int dummyvar>
-INLINE void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers24(MATRIX_DATA_STORAGE_TYPE * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
+INLINE_1 void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers24(MATRIX_DATA_STORAGE_TYPE * frameBuffer, int currentRow, int lsbMsbTransitionBit, int numBrightnessShifts) {
     int i;
     int multiRowRefreshRowOffset = 0;
     int numPixelsPerTempRow = pixels_per_latch/physical_rows_per_refresh_row;
@@ -1035,7 +1035,7 @@ INLINE void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers24(MATRIX_DATA_S
 }
 
 template <int dummyvar>
-INLINE void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers(int lsbMsbTransitionBit, int numBrightnessShifts) {
+INLINE_1 void SmartMatrixHub75Calc_NT<dummyvar>::loadMatrixBuffers(int lsbMsbTransitionBit, int numBrightnessShifts) {
 #if 1
     unsigned char currentRow;
 

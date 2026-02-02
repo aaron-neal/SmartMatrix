@@ -41,7 +41,7 @@
 #include "Esp32MemDisplay.h"
 #include "rom/lldesc.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 // TODO: slower refresh rates require larger timer values - get the min refresh rate from the largest MSB value that will fit in the timer (round up)
 #define MIN_REFRESH_RATE    30

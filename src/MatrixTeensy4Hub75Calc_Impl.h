@@ -23,7 +23,7 @@
 
 #include "SmartMatrix.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 #define MAX_MATRIXCALCULATIONS_LOOPS_WITHOUT_EXIT  5
 
 #ifndef FLASHMEM
@@ -358,7 +358,7 @@ int SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, opt
 }
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-FASTRUN INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers48(volatile rowDataStruct * currentRowDataPtr, unsigned int currentRow) {
+FASTRUN INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers48(volatile rowDataStruct * currentRowDataPtr, unsigned int currentRow) {
     /*  Read a new row of pixel data from the layers, extract the bitplanes for each pixel, reformat
         the data into the format needed for FlexIO, and store that in the rowDataBuffer.
         Bit depths are supported from 1 bit per color channel (3 bits per pixel) to 16 bits per color channel (48 bits per pixel). */
@@ -554,7 +554,7 @@ FASTRUN INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight
 }
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-FASTRUN INLINE void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(unsigned int currentRow) {
+FASTRUN INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::loadMatrixBuffers(unsigned int currentRow) {
     volatile rowDataStruct * currentRowDataPtr = SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getNextRowBufferPtr();
     // same function supports any refresh depth up to 48
     loadMatrixBuffers48(currentRowDataPtr, currentRow);

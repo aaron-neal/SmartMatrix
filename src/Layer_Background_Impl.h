@@ -191,15 +191,15 @@ void SMLayerBackground<RGB, optionFlags>::fillRefreshRow(uint16_t hardwareY, rgb
 extern volatile int totalFramesToInterpolate;
 extern volatile int framesInterpolated;
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 template <typename RGB, unsigned int optionFlags>
-INLINE void SMLayerBackground<RGB, optionFlags>::loadPixelToDrawBuffer(int16_t hwx, int16_t hwy, const RGB& color) {
+INLINE_1 void SMLayerBackground<RGB, optionFlags>::loadPixelToDrawBuffer(int16_t hwx, int16_t hwy, const RGB& color) {
     currentDrawBufferPtr[(hwy * this->matrixWidth) + hwx] = color;
 }
 
 template <typename RGB, unsigned int optionFlags>
-INLINE const RGB SMLayerBackground<RGB, optionFlags>::readPixelFromDrawBuffer(int16_t hwx, int16_t hwy) {
+INLINE_1 const RGB SMLayerBackground<RGB, optionFlags>::readPixelFromDrawBuffer(int16_t hwx, int16_t hwy) {
     RGB pixel = currentDrawBufferPtr[(hwy * this->matrixWidth) + hwx];
     return pixel;
 }

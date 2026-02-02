@@ -25,7 +25,7 @@
 #include <SPI.h>
 #include "DMAChannel.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 #if defined(KINETISL)
     #define ROW_CALCULATION_ISR_PRIORITY   192   // Cortex-M0 Acceptable values: 0,64,128,192

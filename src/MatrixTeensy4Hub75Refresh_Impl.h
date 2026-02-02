@@ -24,7 +24,7 @@
 #include "SmartMatrix.h"
 #include "DMAChannel.h"
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 #ifndef FLASHMEM
 #define FLASHMEM // for compatibility with old versions of Teensyduino
@@ -132,13 +132,13 @@ FASTRUN bool SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panel
 
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-FASTRUN INLINE volatile typename SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::rowDataStruct * SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getNextRowBufferPtr(void) {
+FASTRUN INLINE_1 volatile typename SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::rowDataStruct * SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getNextRowBufferPtr(void) {
     return &(matrixUpdateRows[cbGetNextWrite(&dmaBuffer)]);
 }
 
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-FASTRUN INLINE void SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::writeRowBuffer(uint8_t currentRow) {
+FASTRUN INLINE_1 void SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::writeRowBuffer(uint8_t currentRow) {
     volatile SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::rowDataStruct * currentRowDataPtr = SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getNextRowBufferPtr();
     for (int i = 0; i < LATCHES_PER_ROW; i++) {
         currentRowDataPtr->rowbits[i].timerValues.timer_period = timerLUT[i].timer_period;
@@ -803,7 +803,7 @@ FASTRUN void rowShiftCompleteISR(void) {
 
 
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
-FASTRUN INLINE const typename SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::flexPinConfigStruct & SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getFlexPinConfig(void) {
+FASTRUN INLINE_1 const typename SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::flexPinConfigStruct & SmartMatrixRefreshT4<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getFlexPinConfig(void) {
     return flexPinConfig;
 }
 

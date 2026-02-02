@@ -23,7 +23,7 @@
 
 #include <stdlib.h>     
 
-#define INLINE __attribute__( ( always_inline ) ) inline
+#define INLINE_1 __attribute__( ( always_inline ) ) inline
 
 /* RGB specific methods */
 
@@ -218,7 +218,7 @@ void SMLayerBackgroundGFX<RGB, optionFlags>::swapBuffers(bool copy) {
 /* RGB Specific Core Drawing Methods */
 
 template <typename RGB, unsigned int optionFlags>
-INLINE void SMLayerBackgroundGFX<RGB, optionFlags>::loadPixelToDrawBuffer(int16_t hwx, int16_t hwy, const RGB& color) {
+INLINE_1 void SMLayerBackgroundGFX<RGB, optionFlags>::loadPixelToDrawBuffer(int16_t hwx, int16_t hwy, const RGB& color) {
     currentDrawBufferPtr[(hwy * this->matrixWidth) + hwx] = color;
 }
 
@@ -367,7 +367,7 @@ void SMLayerBackgroundGFX<RGB, optionFlags>::fillScreen(const RGB& color) {
 /* RGB Specific Raw Buffer Access */
 
 template <typename RGB, unsigned int optionFlags>
-INLINE const RGB SMLayerBackgroundGFX<RGB, optionFlags>::readPixelFromDrawBuffer(int16_t hwx, int16_t hwy) {
+INLINE_1 const RGB SMLayerBackgroundGFX<RGB, optionFlags>::readPixelFromDrawBuffer(int16_t hwx, int16_t hwy) {
     RGB pixel = currentDrawBufferPtr[(hwy * this->matrixWidth) + hwx];
     return pixel;
 }
