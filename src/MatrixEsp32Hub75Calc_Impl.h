@@ -891,15 +891,9 @@ INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, pane
         }
   
         for(int j=0; j<COLOR_DEPTH_BITS; j++) {
-            int maskoffset = 0;
-            if(COLOR_DEPTH_BITS == 12)   // 36-bit color
-                maskoffset = 4;
-            else if (COLOR_DEPTH_BITS == 16) // 48-bit color
-                maskoffset = 0;
-            else if (COLOR_DEPTH_BITS == 8)  // 24-bit color
-                maskoffset = 0;
-
-            uint16_t mask = (1 << (j + maskoffset));
+            // tempRow0/tempRow1 are rgb24 here, so the source channel is 8 bits.
+            // The top COLOR_DEPTH_BITS of each channel feed the bit-planes.
+            uint16_t mask = hub75PlaneMask(HUB75_SOURCE_BITS_RGB24, COLOR_DEPTH_BITS, j);
             
             SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::rowBitStruct *p=&(frameBuffer->rowdata[currentRow].rowbits[j]); //bitplane location to write to
             
