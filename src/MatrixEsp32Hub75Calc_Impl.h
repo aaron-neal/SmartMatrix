@@ -1100,12 +1100,14 @@ INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, pane
     frameStruct * currentFrameDataPtr = SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getNextFrameBufferPtr();
 
     for(currentRow = 0; currentRow < MATRIX_SCAN_MOD; currentRow++) {
-        // TODO: support rgb36/48 with same function, copy function to rgb24
+        // rgb48 source for 12 and 16 planes, rgb24 source for 8 and below.
+        // This must match the tempRow allocation in begin(), which uses rgb48
+        // for 12 or 16 planes and rgb24 otherwise.
         if(COLOR_DEPTH_BITS == 16)
             loadMatrixBuffers48(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);
         else if(COLOR_DEPTH_BITS == 12)
             loadMatrixBuffers48(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);
-        else if(COLOR_DEPTH_BITS == 8)
+        else if(COLOR_DEPTH_BITS <= 8)
             loadMatrixBuffers24(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);
     }
 #endif
