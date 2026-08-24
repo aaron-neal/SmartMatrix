@@ -30,6 +30,13 @@ extern void matrixCalculationsSignal(void);
 template <int refreshDepth, int matrixWidth, int matrixHeight, unsigned char panelType, uint32_t optionFlags>
 class SmartMatrixHub75Calc {
 public:
+    static_assert(refreshDepth % COLOR_CHANNELS_PER_PIXEL == 0,
+        "SmartMatrix: kRefreshDepth must be a multiple of 3 (one bit-plane count per colour channel). Valid values: 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48.");
+    static_assert(COLOR_DEPTH_BITS >= 2,
+        "SmartMatrix: kRefreshDepth must be at least 6. A single bit-plane cannot drive row addressing on direct-GPIO pinouts, where plane 0 carries the previous row's address.");
+    static_assert(COLOR_DEPTH_BITS <= 16,
+        "SmartMatrix: kRefreshDepth must be at most 48. The rgb48 source has only 16 bits per colour channel.");
+
     typedef typename SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::frameStruct frameStruct;
     typedef typename SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::rowDataStruct rowDataStruct;
     typedef typename SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::rowBitStruct rowBitStruct;
