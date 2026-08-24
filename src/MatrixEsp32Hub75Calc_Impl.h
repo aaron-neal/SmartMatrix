@@ -376,7 +376,7 @@ void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, op
     // malloc temporary buffers needed for loadMatrixBuffers
     int numPixelsPerTempRow = PIXELS_PER_LATCH/PHYSICAL_ROWS_PER_REFRESH_ROW;
 
-    if((COLOR_DEPTH_BITS == 12) || (COLOR_DEPTH_BITS == 16)){
+    if(COLOR_DEPTH_BITS > 8){
         tempRow0Ptr = malloc(sizeof(rgb48) * numPixelsPerTempRow);
         tempRow1Ptr = malloc(sizeof(rgb48) * numPixelsPerTempRow);
     } else {
@@ -1100,14 +1100,12 @@ INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, pane
     frameStruct * currentFrameDataPtr = SmartMatrixHub75Refresh<refreshDepth, matrixWidth, matrixHeight, panelType, optionFlags>::getNextFrameBufferPtr();
 
     for(currentRow = 0; currentRow < MATRIX_SCAN_MOD; currentRow++) {
-        // rgb48 source for 12 and 16 planes, rgb24 source for 8 and below.
-        // This must match the tempRow allocation in begin(), which uses rgb48
-        // for 12 or 16 planes and rgb24 otherwise.
-        if(COLOR_DEPTH_BITS == 16)
+        // rgb48 source above 8 planes, rgb24 source at 8 and below. This split
+        // must match the tempRow allocation in begin() exactly — routing rgb48
+        // rows into loadMatrixBuffers24 would read past the end of every pixel.
+        if(COLOR_DEPTH_BITS > 8)
             loadMatrixBuffers48(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);
-        else if(COLOR_DEPTH_BITS == 12)
-            loadMatrixBuffers48(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);
-        else if(COLOR_DEPTH_BITS <= 8)
+        else
             loadMatrixBuffers24(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);
     }
 #endif
