@@ -111,15 +111,27 @@ No ghosting, smearing, or brightness change was observed at 1683 Hz, so the
 spec's "very high refresh rates are untested territory" risk did not
 materialise on this panel.
 
+## Second panel type
+
+`SMARTMATRIX_HUB75_32ROW_MOD16SCAN` — the other hardware version, with
+`MATRIX_SCAN_MOD` 16 and `PIXELS_PER_LATCH` 64 against the MOD8SCAN's 8 and
+128 — was also confirmed working at `kRefreshDepth` 12.
+
+This is the geometry whose multi-row refresh mapping differs from the panel
+measured above, so it exercises a different path through
+`loadMatrixBuffers24`'s pixel-group mapping. Both panel types therefore render
+correctly at reduced depth.
+
+Evidence level: confirmed visually on hardware by the developer. Boot-log
+figures were not captured for this panel, so its allocation and refresh numbers
+are not recorded here. Both panels have the same total pixel count, so
+`sizeof framestruct` is expected to be identical at any given depth
+(`MATRIX_SCAN_MOD` and `PIXELS_PER_LATCH` vary inversely).
+
 ## Not tested
 
 Recorded so the coverage of this result is not overstated:
 
-- **The second panel type.** Only `SMARTMATRIX_HUB75_32ROW_64COL_MOD8SCAN` was
-  measured. `SMARTMATRIX_HUB75_32ROW_MOD16SCAN` (the other hardware version,
-  `MATRIX_SCAN_MOD` 16, `PIXELS_PER_LATCH` 64) has not been run at any depth.
-  Its geometry differs, so its multi-row refresh mapping is unexercised at
-  reduced depth.
 - **Depths other than 24 and 12.** 18, 9 and 6 are compile-verified only. Depth
   9 would free a further 2,880 bytes at 3608 Hz if wanted.
 - **A grey ramp.** The visual check used the production UI, whose fully
@@ -141,7 +153,13 @@ Recorded so the coverage of this result is not overstated:
 
 ## Conclusion
 
-`kRefreshDepth` 12 is recommended for this application. It frees 30.75 KB of
-DMA-capable RAM, is visually identical to 24-bit for fully saturated content,
-and additionally removes camera banding as a side effect of the higher refresh
-rate.
+`kRefreshDepth` 12 is recommended for this application, on both panel types. It
+frees 30.75 KB of DMA-capable RAM, is visually identical to 24-bit for fully
+saturated content, and additionally removes camera banding as a side effect of
+the higher refresh rate.
+
+Going lower is not recommended. Depth 12 already captures 85% of the total
+available saving; everything below it is 5,376 bytes combined. Below 12 the
+remaining 16 levels per channel — the headroom for any future dimmed state,
+fade, or shaded element — drops to 8 or 4, and the refresh rate moves into a
+range (3.6-8.4 kHz) that has not been tested on this hardware.
