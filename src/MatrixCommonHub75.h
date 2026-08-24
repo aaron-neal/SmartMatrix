@@ -24,6 +24,8 @@
 #ifndef SmartMatrixCommonHUB75_h
 #define SmartMatrixCommonHUB75_h
 
+#include "MatrixHub75BitPlane.h"
+
 #define DEFAULT_PANEL_WIDTH_FOR_LINEAR_PANELS       32
 #define HUB75_RGB_COLOR_CHANNELS_IN_PARALLEL        2
 
@@ -147,6 +149,10 @@
 #define COLOR_CHANNELS_PER_PIXEL        3
 #define LATCHES_PER_ROW (refreshDepth/COLOR_CHANNELS_PER_PIXEL)
 #define COLOR_DEPTH_BITS (refreshDepth/COLOR_CHANNELS_PER_PIXEL)
+// True when layer data is sourced as rgb48 rather than rgb24. The tempRow
+// allocation and the loadMatrixBuffers dispatch MUST agree on this; sharing
+// one definition makes divergence impossible.
+#define HUB75_USES_RGB48_SOURCE (COLOR_DEPTH_BITS > 8)
 #define MATRIX_SCAN_MOD (CONVERT_PANELTYPE_TO_MATRIXSCANMOD(panelType))
 #define COLS_PER_PANEL (CONVERT_PANELTYPE_TO_MATRIXPANELWIDTH(panelType))
 #define PHYSICAL_ROWS_PER_REFRESH_ROW (MATRIX_PANEL_HEIGHT / MATRIX_SCAN_MOD / HUB75_RGB_COLOR_CHANNELS_IN_PARALLEL)
