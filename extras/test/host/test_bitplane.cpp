@@ -25,21 +25,29 @@ int main() {
     // Masks for the shipped depths must be exactly what the old code produced.
     for (int j = 0; j < 8; ++j)
         CHECK(hub75PlaneMask(HUB75_SOURCE_BITS_RGB24, 8, j) == (1u << j));
-    for (int j = 0; j < 12; ++j)
-        CHECK(hub75PlaneMask(HUB75_SOURCE_BITS_RGB48, 12, j) == (1u << (j + 4)));
-    for (int j = 0; j < 16; ++j)
-        CHECK(hub75PlaneMask(HUB75_SOURCE_BITS_RGB48, 16, j) == (1u << j));
 
-    // A saturated channel must light every plane at every supported depth.
-    // This is what makes the target UI's five colours depth-independent.
+    // Every plane count the dispatch admits must select the top n bits of the
+    // 16-bit rgb48 source. n=9..11 and 13..15 are the counts the widened
+    // dispatch newly enabled, so they are swept here rather than spot-checked.
+    for (int n = 2; n <= 16; ++n)
+        for (int j = 0; j < n; ++j)
+            CHECK(hub75PlaneMask(HUB75_SOURCE_BITS_RGB48, n, j) == (1u << (j + 16 - n)));
+
+    // Every mask must stay inside the source channel's 8-bit window. This is
+    // weak on its own (it would not catch a wrong offset within the window),
+    // but it would catch a mutation that shifted the mask outside the window.
     for (int n = 2; n <= 8; ++n)
         for (int j = 0; j < n; ++j)
             CHECK((0xFFu & hub75PlaneMask(HUB75_SOURCE_BITS_RGB24, n, j)) != 0);
 
-    // A zero channel must light no plane at any depth.
-    for (int n = 2; n <= 8; ++n)
-        for (int j = 0; j < n; ++j)
-            CHECK((0x00u & hub75PlaneMask(HUB75_SOURCE_BITS_RGB24, n, j)) == 0);
+    // The masks for a given depth must be distinct and must together cover
+    // exactly the top-n window of the source channel — this is what a wrong
+    // offset actually breaks.
+    for (int n = 2; n <= 8; ++n) {
+        unsigned int combined = 0;
+        for (int j = 0; j < n; ++j) combined |= hub75PlaneMask(HUB75_SOURCE_BITS_RGB24, n, j);
+        CHECK(combined == ((0xFFu << (8 - n)) & 0xFFu));
+    }
 
     // Reduced depth must take the TOP bits of the source channel, not the bottom.
     for (int j = 0; j < 4; ++j)

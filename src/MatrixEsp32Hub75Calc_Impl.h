@@ -376,7 +376,7 @@ void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, panelType, op
     // malloc temporary buffers needed for loadMatrixBuffers
     int numPixelsPerTempRow = PIXELS_PER_LATCH/PHYSICAL_ROWS_PER_REFRESH_ROW;
 
-    if(COLOR_DEPTH_BITS > 8){
+    if(HUB75_USES_RGB48_SOURCE){
         tempRow0Ptr = malloc(sizeof(rgb48) * numPixelsPerTempRow);
         tempRow1Ptr = malloc(sizeof(rgb48) * numPixelsPerTempRow);
     } else {
@@ -1101,9 +1101,10 @@ INLINE_1 void SmartMatrixHub75Calc<refreshDepth, matrixWidth, matrixHeight, pane
 
     for(currentRow = 0; currentRow < MATRIX_SCAN_MOD; currentRow++) {
         // rgb48 source above 8 planes, rgb24 source at 8 and below. This split
-        // must match the tempRow allocation in begin() exactly — routing rgb48
-        // rows into loadMatrixBuffers24 would read past the end of every pixel.
-        if(COLOR_DEPTH_BITS > 8)
+        // must match the tempRow allocation in begin() exactly: an rgb24-sized
+        // allocation reaching loadMatrixBuffers48 would memset and write twice
+        // the allocated bytes, corrupting the heap.
+        if(HUB75_USES_RGB48_SOURCE)
             loadMatrixBuffers48(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);
         else
             loadMatrixBuffers24(currentFrameDataPtr, currentRow, lsbMsbTransitionBit, numBrightnessShifts);

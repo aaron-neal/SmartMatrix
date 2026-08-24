@@ -53,6 +53,7 @@ Projected after the change:
 - `extras/test/compile-check/platformio.ini` — ESP32 compile verification at a parameterised depth.
 - `extras/test/compile-check/src/main.cpp` — minimal sketch matching the target hardware config.
 - `extras/test/README.md` — how to run both test layers.
+- `extras/test/.gitignore` — ignores PlatformIO build output and the host-test executable.
 - `docs/superpowers/results/2026-08-24-low-color-depth-measurements.md` — recorded hardware measurements (Task 7).
 
 **Modified:**
